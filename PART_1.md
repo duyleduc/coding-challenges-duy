@@ -1,9 +1,16 @@
-## Components description
+# Assumptions
+The requirements in this project is not fully defined so here are some hypothesis that I defined based on my understanding about the application. These hypothesis help to define my architecture clearer and also for the future building.
+
+1. A quiz contains many questions and each question has different types (image, text, number, multiple choice, ...).  
+2. In a quiz session, each question has a timer (defined by the quiz creator when they create it). When a participant answer a question, they must also wait until the end of the timer. In my opinion, the purpose of an eduction application is to build people, so we don't need they do it quick, we want them to learn. The score and leaderboard could be changed when they submit the answer but the next question will be sent at the same time for all participants.
+3. The application will be used around the world, not only in a country or continent. 
+
+# Components description
 
 **Client App (Web/Mobile)**: Users interact with the application through web or mobile.  
-**Authentication service**: Handles user registration, login, authentication, and authorization. Ensures secure access to the quiz sessions.   
+**Authentication service**: Handles user (participant, quiz creator, ...) registration, login, authentication, and authorization. Ensures secure access to the quiz sessions.   
 **CDN (Content Delivery Network)**: Delivers static content like HTML, CSS, JS. Reduces load on the main servers and improves load times for users.  
-**API Gateway**: Manages all client requests (handles authentication, request validating, routing, ...).  
+**API Gateway**: Acts as a single entry point for all client requests. It handles routing, authentication, rate limiting, logging, and other cross-cutting concerns.  
 **Load balancer**: Distributes incoming traffic across multiple instances of backend services -- ensures high availability and reliability.  
 **Websocket server**: Manages real time communication with clients. Mantains *Websocket* connections for live updates.  
 **Quiz service**: Handles the core quiz logic, such as serving questions, creating questions, quiz and also managing quiz session.   
@@ -19,7 +26,7 @@
 **Server monitoring**: Monitors services health. Helps to reacts quicker to incidents.
 
 ---
-## Data flow
+# Data flow
 
 1. **User Joins a Quiz:**
 
@@ -79,7 +86,7 @@ There are also others sides cases we must manage:
 
 
 ---
-## Technology  
+# Technology  
 **Clients**:
 - Mobile: depends on team's skills, choose the best technogy that we master and should be up to date. Some suggestions: Flutter/Android,iOS native (Kotlin/Swift), they are modern technology.
 - Web: depends on team's skills also, choose the best technology that we master and should be up to date. Some suggestions: Angular, ReactJS or VueJS. 
