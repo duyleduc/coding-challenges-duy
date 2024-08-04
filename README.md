@@ -13,7 +13,7 @@ The presentation about the future building of the application.
 
 The back-end component is a Spring Boot application that handles WebSocket connections and Kafka messaging. It allows users to join quiz sessions and communicates with a Kafka message broker to manage quiz session validation and participant updates.
 
-### quiz-webapp: Front-End
+### quiz-webapp
 
 The front-end component is a React application that connects to the WebSocket server, sends requests to join quiz sessions, and displays real-time updates about the quiz session and participants.
 
