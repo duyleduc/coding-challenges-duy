@@ -1,0 +1,27 @@
+# PostgreSQL Configuration
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/quiz
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  # JPA/Hibernate Configuration (Optional, if using JPA)
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      bootstrap-servers: 0.0.0.0:9092
+      group-id: webSocketGroup
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      acks: -1
+      bootstrap-servers: 0.0.0.0:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

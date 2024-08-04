@@ -1,10 +1,17 @@
 # Assumptions
+
 The requirements in this project is not fully defined so here are some hypothesis that I defined based on my understanding about the application. These hypothesis help to define my architecture clearer and also for the future building.
 
 1. A quiz contains many questions and each question has different types (image, text, number, multiple choice, ...).  
 2. In a quiz session, each question has a timer (defined by the quiz creator when they create it). When a participant answer a question, they must also wait until the end of the timer. In my opinion, the purpose of an eduction application is to build people, so we don't need they do it quick, we want them to learn. The score and leaderboard could be changed when they submit the answer but the next question will be sent at the same time for all participants.
 3. The application will be used around the world, not only in a country or continent. 
+  
+  
+---
+# General architecture 
+![drawing](architecture-quiz-real-time.png)
 
+---
 # Components description
 
 **Client App (Web/Mobile)**: Users interact with the application through web or mobile.  
