@@ -15,33 +15,52 @@ const QuizComponent: React.FC = () => {
     const [response, setResponse] = useState<string | null>(null);
     const [participants, setParticipants] = useState<string[]>([])
     const [stompClient, setStompClient] = useState<Client | null>(null);
+    const [connected, setConnected] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (!stompClient && !connected) {
+            joinWs();
+        }
+    })
+
+    const joinWs = (callback?: any) => {
+        setConnected(true);
+        const socket = new SockJS('http://localhost:8080/ws');
+        const client = Stomp.over(socket);
+        setStompClient(client);
+        client.connect({}, (frame: Frame | undefined) => {
+            console.log('Connected: ');
+            if (callback) {
+                callback();
+            }
+        });
+    }
 
 
     const sendJoinRequest = () => {
-        if (quizSessionId) {
-            const socket = new SockJS('http://localhost:8080/ws');
-            const client = Stomp.over(socket);
-            setStompClient(client);
-
-            client.connect({}, (frame: Frame | undefined) => {
-                console.log('Connected: ');
-                if (stompClient) {
-                    stompClient.send("/app/joinQuiz", {}, JSON.stringify({ 'userId': userId, 'quizSessionId': quizSessionId }));
-                    stompClient.subscribe(`/topic/join_quiz_session_response/${quizSessionId}`, (message) => {
-                        const response: JoinQuizResponse = JSON.parse(message.body);
-                        
-                        setResponse(response.canJoin ? "You can join the quiz session" : "You cannot join the quiz session");
-                        setParticipants(response.participants);
-                        
-                        if (!response.canJoin) {
-                            client.disconnect(() => { console.log("Must deconnect this topic") });
-                        }
-                    });
-                }
-            });
-
+        console.log('sendJoinrequest');
+        if (quizSessionId && stompClient) {
+            if (connected) {
+                join();
+            }
         }
     };
+
+    const join = () => {
+        if (stompClient) {
+            stompClient.send("/app/joinQuiz", {}, JSON.stringify({ 'userId': userId, 'quizSessionId': quizSessionId }));
+            const sub = stompClient.subscribe(`/topic/join_quiz_session_response/${quizSessionId}`, (message) => {
+                const response: JoinQuizResponse = JSON.parse(message.body);
+
+                setResponse(response.canJoin ? "You can join the quiz session" : "You cannot join the quiz session");
+                setParticipants(response.participants);
+
+                if (!response.canJoin) {
+                    sub.unsubscribe();
+                }
+            });
+        }
+    }
 
     return (
         <div>
